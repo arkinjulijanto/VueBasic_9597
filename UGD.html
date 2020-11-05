@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tebakin yuk!</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #9ad3bc;
+        }
+
+        .card-footer {
+            background-color: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="app">
+        <div class="container-fluid mt-5">
+            <div class="card text-center">
+            <div class="card-header">
+                <h2>Tebakin yuk!</h2>
+            </div>
+            <div class="card-body">
+                <h5 v-if="hasil === 'tebak'" class="card-title">Coba masukin angka</h5>
+                <h5 v-if="hasil === 'benar'" class="card-title">Keren, Bener nih</h5>
+                <h5 v-if="hasil === 'salah'" class="card-title">Yah salah</h5>
+                <h5 v-if="hasil === 'selesai'" class="card-title">Yah habis deh kesempatannya</h5>
+                
+                <div class="form-group">
+                    <input v-model="inputan" type="number" @click="cheat" class="form-control" :disabled="penanda" id="exampleInputEmail1">
+                </div>
+                    <button @click="cek" :disabled="penanda" class="btn btn-outline-success btn-block">Tebak</button>
+                    <button v-if="hasil === 'benar'" @click="done" class="btn btn-success btn-block">Main Lagi yuk!</button>
+                    <button v-if="hasil === 'salah'" @click="again" class="btn btn-outline-primary btn-block">Lagi yuk!</button>
+                    <button v-if="hasil === 'selesai'" @click="done" class="btn btn-outline-danger btn-block">Ulang lagi yuk!</button>
+                </div>
+                
+            </div>
+            <div v-if="kesempatan != 0" class="card-footer text-muted text-center">
+                Kesempatan kamu : {{ `${kesempatan}` }}
+            </div>
+            <div v-else class="card-footer text-muted text-center">
+                Jawaban yang benar : {{ `${angka}` }}
+            </div>
+        </div>
+        <footer class="text-center mt-5">
+            {{`${arkin.nama} | ${arkin.npm} | ${arkin.kelas}`}}
+        </footer>
+    </div>
+        
+    <script src="vue.js"></script>
+    <!-- jQuery and JS bundle w/ Popper.js -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>    
+</body>
+<script>
+    new Vue({
+        el: "#app",
+        data: {
+            arkin: {
+                nama: 'Arkin Eliezer Julijanto',
+                npm: '180709597',
+                kelas: 'E',
+            },
+            angka: Math.floor(Math.random() * 10)+1,
+            kesempatan: 3,
+            inputan: 0,
+            penanda: false,
+            hasil: "tebak",
+        },
+        methods: {
+            cek() {
+                this.penanda = true;
+                if (this.inputan != this.angka) {
+                    this.kesempatan--;
+                    if (this.kesempatan == 0) {
+                        this.hasil = "selesai"
+                    } else {
+                        this.hasil = "salah";
+                    }
+                } else {
+                    this.hasil = "benar";
+                }
+            },
+            again() {
+                this.hasil = "tebak";
+                this.penanda = false;
+            },
+            done() {
+                this.angka = Math.floor(Math.random() * 10)+1;
+                this.kesempatan = 3;
+                this.penanda = false;
+                this.inputan = 0;
+                this.hasil = "tebak";
+            },
+            cheat() {
+                console.log(this.angka);
+            }
+        }
+    });
+</script>
+</html>
